@@ -1,0 +1,24 @@
+<h1>Create <?= $_['info']['label']['singular'] ?></h1>
+<p><?= $_['info']['description'] ?></p>
+
+<form method="post" enctype="multipart/form-data">
+    <? foreach ($_['info']['fields'] as $field): ?>
+
+    <? if ($field['name'] == 'id') continue; ?>
+
+    <h3><?= $field['label'] ?></h3>
+    <p><?= $field['description'] ?></p>
+
+    <? if (strstr($field['type'], 'File')): ?>
+    <input type="file" name="<?= $field['name'] ?>" />
+    <? elseif (strstr($field['type'], 'Text')): ?>
+    <textarea name="<?= $field['name'] ?>"></textarea>
+    <? else: ?>
+    <input type="text" name="<?= $field['name'] ?>" />
+    <? endif;?>
+
+    <? endforeach; ?>
+    
+    <br /><br />
+    <input type="submit" name="submit" />
+</form>

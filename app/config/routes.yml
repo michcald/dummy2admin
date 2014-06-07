@@ -1,0 +1,59 @@
+routes:
+
+    - name: dummy.index
+      methods: ["GET"]
+      uri:
+          pattern: ""
+          requirements: []
+      controller: \Michcald\DummyAdmin\Controller\IndexController
+      action: indexAction
+
+    - name: dummy.repositories
+      methods: ["GET"]
+      uri:
+          pattern: repositories
+          requirements: []
+      controller: \Michcald\DummyAdmin\Controller\IndexController
+      action: repositoriesAction
+    
+    - name: dummy.repo.list
+      methods: ["GET"]
+      uri:
+          pattern: "{repository}/list"
+          requirements:
+              - param: repository
+                value: "[a-z0-9_]+"
+      controller: \Michcald\DummyAdmin\Controller\RepositoryController
+      action: listAction
+
+    - name: dummy.repo.create
+      methods: ["GET", "POST"]
+      uri:
+          pattern: "{repository}/create"
+          requirements:
+              - param: repository
+                value: "[a-z0-9_]+"
+      controller: \Michcald\DummyAdmin\Controller\RepositoryController
+      action: createAction
+
+    - name: dummy.repo.delete
+      methods: ["GET"]
+      uri:
+          pattern: "{repository}/delete/{id}"
+          requirements:
+              - param: repository
+                value: "[a-z0-9_]+"
+              - param: id
+                value: "\d+"
+      controller: \Michcald\DummyAdmin\Controller\RepositoryController
+      action: deleteAction
+
+    - name: not_found
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+      uri:
+          pattern: "{any}"
+          requirements:
+              - param: any
+                value: ".*"
+      controller: \Michcald\DummyAdmin\Controller\IndexController
+      action: notFoundAction

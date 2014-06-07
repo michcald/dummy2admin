@@ -1,0 +1,11 @@
+env: dev
+
+admin:
+    title: Dummy
+    description: Dummy administration panel
+
+dummy:
+    endpoint: http://localhost/dummy2/dummy2/api
+    app:
+        name: michael
+        password: michael

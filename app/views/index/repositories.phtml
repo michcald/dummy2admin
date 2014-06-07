@@ -1,0 +1,70 @@
+<ol class="breadcrumb">
+  <li><a href="<?= $this->url('') ?>">Home</a></li>
+  <li class="active">Repositories</li>
+</ol>
+
+<? foreach ($_['repos'] as $r): ?>
+
+<h3>
+    <?= $r['label']['singular'] ?>
+    <small><?= $r['name']?></small>
+</h3>
+
+<p>
+    <strong>Parents:</strong>
+    <? if (count($r['parents']) > 0): ?>
+    <?= implode(', ', $r['parents']) ?>
+    <? else: ?>
+    None
+    <? endif; ?>
+</p>
+
+<p>
+    <strong>Children:</strong>
+    <? if (count($r['children']) > 0): ?>
+    <?= implode(', ', $r['children']) ?>
+    <? else: ?>
+    None
+    <? endif; ?>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Label</th>
+                <th>Description</th>
+                <th>Searchable</th>
+                <th>Required</th>
+            </tr>
+        </thead>
+        <tbody>
+            <? foreach ($r['fields'] as $f): ?>
+            <tr>
+                <td>
+                    <?= $f['name'] ?>
+                </td>
+                <td>
+                    <?= $f['type'] ?>
+                </td>
+                <td>
+                    <?= $f['label'] ?>
+                </td>
+                <td>
+                    <?= $f['description'] ?>
+                </td>
+                <td>
+                    <?= $f['searchable'] ?>
+                </td>
+                <td>
+                    <?= $f['required'] ?>
+                </td>
+            </tr>
+            <? endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<? endforeach; ?>
