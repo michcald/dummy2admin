@@ -1,0 +1,37 @@
+<ol class="breadcrumb">
+    <li><a href="<?= $this->url('') ?>">Home</a></li>
+    <? foreach ($_['repository']['parents'] as $p): ?>
+    <li>
+        <a href="<?= $this->url($p . '/list') ?>">
+            <?= $p ?>
+        </a>
+    </li>
+    <? endforeach; ?>
+    <li class="active">
+        <a href="<?= $this->url($_['repository']['name'] . '/list') ?>">
+            <?= $_['repository']['label']['plural'] ?>
+        </a>
+    </li>
+    <li>
+        <?= $_['repository']['label']['singular'] ?>
+    </li>
+</ol>
+
+<?= $this->render('../app/views/repository/partials/tabs.phtml', array(
+    'action' => 'read',
+    'repository' => $_['repository'],
+    'entity' => $_['entity']
+)) ?>
+
+<br />
+
+<table class="table table-bordered">
+    <? foreach ($_['repository']['fields'] as $field): ?>
+    <tr>
+        <th><?= $field['label'] ?></th>
+        <td>
+            <?= $_['entity'][$field['name']] ?>
+        </td>
+    </tr>
+    <? endforeach; ?>
+</table>

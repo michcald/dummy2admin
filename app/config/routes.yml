@@ -26,6 +26,18 @@ routes:
       controller: \Michcald\DummyAdmin\Controller\RepositoryController
       action: listAction
 
+    - name: dummy.repo.read
+      methods: ["GET"]
+      uri:
+          pattern: "{repository}/read/{id}"
+          requirements:
+              - param: repository
+                value: "[a-z0-9_]+"
+              - param: id
+                value: "\d+"
+      controller: \Michcald\DummyAdmin\Controller\RepositoryController
+      action: readAction
+
     - name: dummy.repo.create
       methods: ["GET", "POST"]
       uri:
@@ -35,6 +47,18 @@ routes:
                 value: "[a-z0-9_]+"
       controller: \Michcald\DummyAdmin\Controller\RepositoryController
       action: createAction
+
+    - name: dummy.repo.edit
+      methods: ["GET", "POST"]
+      uri:
+          pattern: "{repository}/edit/{id}"
+          requirements:
+              - param: repository
+                value: "[a-z0-9_]+"
+              - param: id
+                value: "\d+"
+      controller: \Michcald\DummyAdmin\Controller\RepositoryController
+      action: editAction
 
     - name: dummy.repo.delete
       methods: ["GET"]

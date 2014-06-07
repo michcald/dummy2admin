@@ -30,7 +30,7 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
         $json = $resp->getContent();
         $list = json_decode($json, true);
         
-        //\Zend\Debug\Debug::dump($list);die;
+        //\Zend\Debug\Debug::dump($resp);die;
         
         $page = $this->getView()->render(
             '../app/views/repository/list.phtml',
@@ -38,6 +38,82 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
                 'repository' => $repoInfo,
                 'list'       => $list,
                 'query'      => $query
+            )
+        );
+        
+        $body = $this->getView()->render(
+            '../app/views/layout.phtml',
+            array(
+                'page' => $page
+            )
+        );
+        
+        $response = new \Michcald\Mvc\Response();
+        $response->setContent('text/html')
+                ->setContent($body);
+        
+        return $response;
+    }
+    
+    public function readAction($repository, $id)
+    {
+        $app = \Michcald\Mvc\Container::get('dummy.app');
+        
+        $resp = $app->call('get', $repository . '/_info');
+        $statusCode = $resp->getStatusCode();
+        $json = $resp->getContent();
+        $repoInfo = json_decode($json, true);
+        
+        $resp = $app->call('get', $repository . '/' . $id);
+        $statusCode = $resp->getStatusCode();
+        $json = $resp->getContent();
+        $entity = json_decode($json, true);
+        
+        //\Zend\Debug\Debug::dump($entity);die;
+        
+        $page = $this->getView()->render(
+            '../app/views/repository/read.phtml',
+            array(
+                'repository' => $repoInfo,
+                'entity'     => $entity
+            )
+        );
+        
+        $body = $this->getView()->render(
+            '../app/views/layout.phtml',
+            array(
+                'page' => $page
+            )
+        );
+        
+        $response = new \Michcald\Mvc\Response();
+        $response->setContent('text/html')
+                ->setContent($body);
+        
+        return $response;
+    }
+    
+    public function editAction($repository, $id)
+    {
+        $app = \Michcald\Mvc\Container::get('dummy.app');
+        
+        $resp = $app->call('get', $repository . '/_info');
+        $statusCode = $resp->getStatusCode();
+        $json = $resp->getContent();
+        $repoInfo = json_decode($json, true);
+        
+        $resp = $app->call('get', $repository . '/' . $id);
+        $statusCode = $resp->getStatusCode();
+        $json = $resp->getContent();
+        $entity = json_decode($json, true);
+        
+        //\Zend\Debug\Debug::dump($entity);die;
+        
+        $page = $this->getView()->render(
+            '../app/views/repository/edit.phtml',
+            array(
+                'repository' => $repoInfo,
+                'entity'     => $entity
             )
         );
         

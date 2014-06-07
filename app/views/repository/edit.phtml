@@ -1,0 +1,59 @@
+<ol class="breadcrumb">
+    <li><a href="<?= $this->url('') ?>">Home</a></li>
+    <? foreach ($_['repository']['parents'] as $p): ?>
+    <li>
+        <a href="<?= $this->url($p . '/list') ?>">
+            <?= $p ?>
+        </a>
+    </li>
+    <? endforeach; ?>
+    <li class="active">
+        <a href="<?= $this->url($_['repository']['name'] . '/list') ?>">
+            <?= $_['repository']['label']['plural'] ?>
+        </a>
+    </li>
+    <li>
+        <?= $_['repository']['label']['singular'] ?>
+    </li>
+</ol>
+
+<?= $this->render('../app/views/repository/partials/tabs.phtml', array(
+    'action' => 'edit',
+    'repository' => $_['repository'],
+    'entity' => $_['entity']
+)) ?>
+
+<br />
+
+<form role="form">
+    <? foreach ($_['repository']['fields'] as $field): ?>
+    <div class="form-group" enctype='multipart/form-data'>
+        <label for="<?= $field['name'] ?>">
+            <?= $field['label'] ?>
+        </label>
+        <? if ($field['description']): ?>
+        <p><?= $field['description'] ?></p>
+        <? endif; ?>
+        <? if ($field['type'] == 'string'): ?>
+        <input type="text" class="form-control" name="<?= $field['name'] ?>" id="<?= $field['name'] ?>" value="<?= $_['entity'][$field['name']] ?>" />
+        <? elseif ($field['type'] == 'primary_key'): ?>
+        <input type="text" class="form-control" id="<?= $field['name'] ?>" value="<?= $_['entity'][$field['name']] ?>" disabled />
+        <? elseif ($field['type'] == 'foreign_key'): ?>
+        <select class="form-control" name="<?= $field['name'] ?>" id="<?= $field['name'] ?>">
+            <? foreach ($field['options'] as $option): ?>
+            <option value="<?= $option['id'] ?>"<? if ($_['entity'][$field['name']] == $option['id']): ?> selected<? endif; ?>>
+                <?= $option['id'] ?>
+            </option>
+            <? endforeach; ?>
+        </select>
+        <? elseif ($field['type'] == 'file'): ?>
+        <input type="file" class="form-control" name="<?= $field['name'] ?>" id="<?= $field['name'] ?>" />
+        <? elseif ($field['type'] == 'text'): ?>
+        <textarea class="form-control" name="<?= $field['name'] ?>" id="<?= $field['name'] ?>"><?= $_['entity'][$field['name']] ?></textarea>
+        <? endif; ?>
+    </div>
+    <? endforeach; ?>
+    <button type="submit" class="btn btn-default">
+        Save
+    </button>
+</form>

@@ -1,0 +1,26 @@
+<ul class="nav nav-tabs">
+    <li<? if ($_['action'] == 'read'): ?> class="active"<? endif; ?>>
+        <a href="<?= $this->url(
+            $_['repository']['name'] . '/read/' . $_['entity']['id']
+        ) ?>">
+            Read
+        </a>
+    </li>
+    <li<? if ($_['action'] == 'edit'): ?> class="active"<? endif; ?>>
+        <a href="<?= $this->url(
+            $_['repository']['name'] . '/edit/' . $_['entity']['id']
+        ) ?>">
+            Edit
+        </a>
+    </li>
+    <? foreach ($_['repository']['children'] as $child): ?>
+    <li>
+        <a href="#"><?= $child ?></a>
+    </li>
+    <? endforeach; ?>
+    <li<? if ($_['action'] == 'delete'): ?> class="active"<? endif; ?>>
+        <a href="#">
+            Delete
+        </a>
+    </li>
+</ul>

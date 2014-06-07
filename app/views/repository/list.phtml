@@ -18,8 +18,8 @@
 </div>
 <? endif; ?>
 
-<div class="row">
-    <div class="col-lg-6">
+<div>
+    <div class="col-md-10">
         <form method="GET">
             <div class="input-group">
                 <input type="text" name="query"<? if ($_['query']): ?> value="<?= $_['query']?>"<? endif; ?> class="form-control" autocomplete="off" />
@@ -30,8 +30,16 @@
                 </span>
             </div><!-- /input-group -->
         </form>
-    </div><!-- /.col-lg-6 -->
-</div><!-- /.row -->
+    </div>
+    <div class="col-md-2">
+        <a hef="#">
+            <span class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>
+                Add new
+            </span>
+        </a>
+    </div>
+</div>
 
 <? if ($_['list']['paginator']['results'] == 0): ?>
 
@@ -131,6 +139,10 @@
                 </td>
                 <? endforeach; ?>
                 <td class="text-right span1">
+                    <a href="<?= $this->url($_['repository']['name'] . '/read/' . $entity['id']) ?>">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+                    &emsp;
                     <a href="<?= $this->url('') ?>">
                         <span class="glyphicon glyphicon-remove red"></span>
                     </a>

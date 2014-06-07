@@ -88,14 +88,46 @@
         <h3 class="panel-title">API</h3>
     </div>
     <div class="panel-body">
-        <? $url = $this->config()->dummy['endpoint'] . '/' . $r['name'] ?>
-        <p>
-            <span class="label label-default">GET</span>
-            <span class="label label-success">POST</span>
-            <span class="label label-info">PUT</span>
-            <span class="label label-warning">DELETE</span>&emsp;
-            <?= $url ?>
-        </p>
+        <? $url = $this->config()->dummy['endpoint'] . '/<b>' . $r['name'] . '</b>' ?>
+        <table class="table">
+            <tr>
+                <td>
+                    <span class="label label-default">GET</span>
+                </td>
+                <td>
+                    <pre>
+# list of entities        
+<?= $url ?>
+
+# single entity
+<?= $url ?>/{id}</pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="label label-success">POST</span>
+                </td>
+                <td>
+                    <pre><?= $url ?></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="label label-info">PUT</span>
+                </td>
+                <td>
+                    <pre><?= $url ?>/{id}</pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="label label-warning">DELETE</span>
+                </td>
+                <td>
+                    <pre><?= $url ?>/{id}</pre>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
