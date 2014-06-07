@@ -17,11 +17,13 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <? foreach ($this->repositories() as $r): ?>
+        <? if ($r['showable']): ?>
         <li>
             <a href="<?= $this->url($r['name'] . '/list') ?>">
                 <?= $r['label']['plural'] ?>
             </a>
         </li>
+        <? endif; ?>
         <? endforeach; ?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -31,13 +33,12 @@
               <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
+              <li role="presentation" class="dropdown-header">Documentation</li>
             <li>
                 <a href="<?= $this->url('repositories') ?>">
                     <span class="glyphicon glyphicon-cloud"></span>&emsp;Repositories
                 </a>
             </li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
           </ul>
         </li>
       </ul>

@@ -7,6 +7,7 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
     public function listAction($repository)
     {
         $page = (int)$this->getRequest()->getQueryParam('page', 1);
+        $limit = (int)$this->getRequest()->getQueryParam('limit', 10);
         $query = $this->getRequest()->getQueryParam('query', false);
         $orderBy = $this->getRequest()->getQueryParam('orderb', false);
         $orderDir = $this->getRequest()->getQueryParam('orderd', false);
@@ -21,6 +22,7 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
         
         $resp = $app->call('get', $repository, array(
             'page'    => $page,
+            'limit'   => $limit,
             'query'   => $query,
             'orderb'  => $orderBy,
             'orderd'  => $orderDir,
@@ -37,6 +39,7 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
             array(
                 'repository' => $repoInfo,
                 'list'       => $list,
+                'limit'      => $limit,
                 'query'      => $query,
                 'orderb'     => $orderBy,
                 'orderd'     => $orderDir,

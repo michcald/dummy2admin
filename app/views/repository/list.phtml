@@ -18,6 +18,7 @@
         ) ?>" method="GET">
             <div class="input-group">
                 <input type="text" name="query"<? if ($_['query']): ?> value="<?= $_['query']?>"<? endif; ?> class="form-control" autocomplete="off" />
+                       <input type="hidden" name="limit" value="<?= $_['limit'] ?>" />
                 <input type="hidden" name="orderb" value="<?= $_['orderb'] ?>" />
                 <input type="hidden" name="orderd" value="<?= $_['orderd'] ?>" />
                 <? foreach ($_['filters'] as $filter => $value): ?>
@@ -41,8 +42,10 @@
     </div>
 </div>
 
+<div style="clear: both"></div>
+
 <? if (count($_['repository']['parents']) > 0): ?>
-<br /><br /><br />
+<br />
 <div class="container">
     <strong>Filters:</strong>
     <? foreach ($_['repository']['fields'] as $field): ?>
@@ -67,9 +70,10 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'query' => $_['query'],
-                    'orderb' => $_['orderb'],
-                    'orderd' => $_['orderd'],
+                    'query'   => $_['query'],
+                    'limit'   => $_['limit'],
+                    'orderb'  => $_['orderb'],
+                    'orderd'  => $_['orderd'],
                     'filters' => array()
                 )
             ) ?>">
@@ -82,9 +86,10 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'query' => $_['query'],
-                    'orderb' => $_['orderb'],
-                    'orderd' => $_['orderd'],
+                    'query'   => $_['query'],
+                    'limit'   => $_['limit'],
+                    'orderb'  => $_['orderb'],
+                    'orderd'  => $_['orderd'],
                     'filters' => array_merge(
                         $_['filters'],
                         array($field['name'] => $option['value'])
@@ -111,7 +116,7 @@
 
 <? else: ?>
 
-<div class="container">
+<div class="pull-right">
     <ul class="pagination">
         <li class="disabled">
             <a href="#">
@@ -123,8 +128,9 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'page' => $_['list']['paginator']['page']['current'] - 1,
-                    'query' => $_['query'],
+                    'page'   => $_['list']['paginator']['page']['current'] - 1,
+                    'query'  => $_['query'],
+                    'limit'  => $_['limit'],
                     'orderb' => $_['orderb'],
                     'orderd' => $_['orderd']
                 )
@@ -140,8 +146,9 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'page' => $i,
-                    'query' => $_['query'],
+                    'page'   => $i,
+                    'query'  => $_['query'],
+                    'limit'  => $_['limit'],
                     'orderb' => $_['orderb'],
                     'orderd' => $_['orderd']
                 )
@@ -155,8 +162,9 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'page' => $_['list']['paginator']['page']['current'] + 1,
-                    'query' => $_['query'],
+                    'page'   => $_['list']['paginator']['page']['current'] + 1,
+                    'query'  => $_['query'],
+                    'limit'  => $_['limit'],
                     'orderb' => $_['orderb'],
                     'orderd' => $_['orderd']
                 )
@@ -167,8 +175,37 @@
         <? else: ?>
         <li class="disabled"><a href="#">&raquo;</a></li>
         <? endif; ?>
-</ul>
+    </ul>
 </div>
+
+<br />
+<div class="pull-left">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+            <strong>Rows per page:</strong> <?= $_['limit'] ?> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <? for($i=10; $i<=100; $i+=10): ?>
+            <li>
+                <a href="<?= $this->url(
+                    $_['repository']['name'] . '/list',
+                    array(
+                        'query'   => $_['query'],
+                        'limit'   => $i,
+                        'orderb'  => $_['orderb'],
+                        'orderd'  => $_['orderd'],
+                        'filters' => array()
+                    )
+                ) ?>">
+                    <?= $i ?>
+                </a>
+            </li>
+            <? endfor; ?>
+        </ul>
+    </div>
+</div>
+
+<div style="clear: both"></div>
 
 <div class="table-responsive">
     <table class="table table-striped table-hover table-condensed">
@@ -181,7 +218,8 @@
                     <a href="<?= $this->url(
                         $_['repository']['name'] . '/list',
                         array(
-                            'query' => $_['query'],
+                            'query'  => $_['query'],
+                            'limit'  => $_['limit'],
                             'orderb' => $field['name'],
                             'orderd' => 'asc'
                         )
