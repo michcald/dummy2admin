@@ -1,21 +1,10 @@
-<ol class="breadcrumb">
-    <li><a href="<?= $this->url('') ?>">Home</a></li>
-    <? foreach ($_['repository']['parents'] as $p): ?>
-    <li>
-        <a href="<?= $this->url($p . '/list') ?>">
-            <?= $p ?>
-        </a>
-    </li>
-    <? endforeach; ?>
-    <li class="active">
-        <a href="<?= $this->url($_['repository']['name'] . '/list') ?>">
-            <?= $_['repository']['label']['plural'] ?>
-        </a>
-    </li>
-    <li>
-        <?= $_['repository']['label']['singular'] ?>
-    </li>
-</ol>
+<?= $this->render(
+    '../app/views/repository/partials/breadcrumbs.phtml',
+    array(
+        'repository' => $_['repository'],
+        'active' => 'Read'
+    )
+) ?>
 
 <?= $this->render('../app/views/repository/partials/tabs.phtml', array(
     'action' => 'read',

@@ -1,20 +1,9 @@
-<ol class="breadcrumb">
-    <li><a href="<?= $this->url('') ?>">Home</a></li>
-    <? $parents = array() ?>
-    <? foreach ($_['repository']['fields'] as $field): ?>
-    <? if ($field['type'] == 'foreign_key'): ?>
-    <? $parents[] = '<a href="' . $this->url($field['repository']['name'] . '/list') . '">' . $field['repository']['label']['plural'] . '</a>' ?>
-    <? endif; ?>
-    <? endforeach; ?>
-    <? if (count($parents) > 0): ?>
-    <li>
-        <?= implode(', ', $parents) ?>
-    </li>
-    <? endif; ?>
-    <li class="active">
-        <?= $_['repository']['label']['plural'] ?>
-    </li>
-</ol>
+<?= $this->render(
+    '../app/views/repository/partials/breadcrumbs.phtml',
+    array(
+        'repository' => $_['repository']
+    )
+) ?>
 
 <? if ($_['repository']['description']): ?>
 <div class="well">

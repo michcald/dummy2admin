@@ -15,7 +15,16 @@
     </li>
     <? foreach ($_['repository']['children'] as $child): ?>
     <li>
-        <a href="#"><?= $child ?></a>
+        <a href="<?= $this->url(
+            $_['repository']['name'] . '/list',
+            array(
+                'filters' => array(
+                    //$field['name'] => $_['entity'][$field['name']]
+                )
+            )
+        ) ?>">
+            <?= $child ?>
+        </a>
     </li>
     <? endforeach; ?>
     <li<? if ($_['action'] == 'delete'): ?> class="active"<? endif; ?>>
