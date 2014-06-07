@@ -1,0 +1,144 @@
+<ol class="breadcrumb">
+    <li><a href="<?= $this->url('') ?>">Home</a></li>
+    <? foreach ($_['repository']['parents'] as $p): ?>
+    <li>
+        <a href="<?= $this->url($p . '/list') ?>">
+            <?= $p ?>
+        </a>
+    </li>
+    <? endforeach; ?>
+    <li class="active">
+        <?= $_['repository']['label']['plural'] ?>
+    </li>
+</ol>
+
+<? if ($_['repository']['description']): ?>
+<div class="well">
+    <?= $_['repository']['description']?>
+</div>
+<? endif; ?>
+
+<div class="row">
+    <div class="col-lg-6">
+        <form method="GET">
+            <div class="input-group">
+                <input type="text" name="query"<? if ($_['query']): ?> value="<?= $_['query']?>"<? endif; ?> class="form-control" autocomplete="off" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div><!-- /input-group -->
+        </form>
+    </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+<? if ($_['list']['paginator']['results'] == 0): ?>
+
+<br />
+<p class="alert alert-info">
+    No results
+</p>
+
+<? else: ?>
+
+<div class="container">
+    <ul class="pagination">
+        <li class="disabled">
+            <a href="#">
+                Total results: <strong><?= $_['list']['paginator']['results'] ?></strong>
+            </a>
+        </li>
+        <? if ($_['list']['paginator']['page']['current'] > 1): ?>
+        <li>
+            <a href="<?= $this->url(
+                $_['repository']['name'] . '/list',
+                array(
+                    'page' => $_['list']['paginator']['page']['current'] - 1
+                )
+            ) ?>">
+                &laquo;
+            </a>
+        </li>
+        <? else: ?>
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        <? endif; ?>
+        <? for($i=1; $i<=$_['list']['paginator']['page']['total']; $i++): ?>
+        <li<? if ($_['list']['paginator']['page']['current'] == $i): ?> class="active"<? endif; ?>>
+            <a href="<?= $this->url(
+                $_['repository']['name'] . '/list',
+                array(
+                    'page' => $i
+                )
+            )?>">
+                <?= $i ?>
+            </a>
+        </li>
+        <? endfor; ?>
+        <? if ($_['list']['paginator']['page']['current'] < $_['list']['paginator']['page']['total']): ?>
+        <li>
+            <a href="<?= $this->url(
+                $_['repository']['name'] . '/list',
+                array(
+                    'page' => $_['list']['paginator']['page']['current'] + 1
+                )
+            ) ?>">
+                &raquo;
+            </a>
+        </li>
+        <? else: ?>
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        <? endif; ?>
+</ul>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+                <? foreach ($_['repository']['fields'] as $field): ?>
+                <th>
+                    <? if ($field['sortable']): ?>
+                    <a href="<?= $this->url(
+                        $_['repository']['name'] . '/list',
+                        array(
+                            'orderb' => $field['name'],
+                            'orderd' => 'asc'
+                        )
+                    ) ?>">
+                        <?= $field['label'] ?>
+                    </a>
+                    <? else: ?>
+                    <?= $field['label'] ?>
+                    <? endif; ?>
+                </th>
+                <? endforeach; ?>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <? foreach ($_['list']['results'] as $entity): ?>
+            <tr>
+                <? foreach ($entity as $key => $value): ?>
+                <td>
+                    <? if (is_array($value)): ?>
+                    <a href="http://localhost/dummy2/dummy2/pub/<?= $value['url'] ?>" target="_blank">
+                        file
+                    </a>
+                    <? else: ?>
+                    <?= $value ?>
+                    <? endif; ?>
+                </td>
+                <? endforeach; ?>
+                <td class="text-right span1">
+                    <a href="<?= $this->url('') ?>">
+                        <span class="glyphicon glyphicon-remove red"></span>
+                    </a>
+                </td>
+            </tr>
+            <? endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<? endif; ?>

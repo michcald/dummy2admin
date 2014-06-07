@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
-  <li><a href="<?= $this->url('') ?>">Home</a></li>
-  <li class="active">Repositories</li>
+    <li><a href="<?= $this->url('') ?>">Home</a></li>
+    <li class="active">Repositories</li>
 </ol>
 
 <? foreach ($_['repos'] as $r): ?>
@@ -10,21 +10,33 @@
     <small><?= $r['name']?></small>
 </h3>
 
+<? if ($r['description']): ?>
+<div class="well">
+    <?= $r['description']?>
+</div>
+<? endif; ?>
+
 <p>
     <strong>Parents:</strong>
     <? if (count($r['parents']) > 0): ?>
-    <?= implode(', ', $r['parents']) ?>
+    <span class="label label-primary">
+        <?= implode('</span><span class="label label-primary">, ', $r['parents']) ?>
+    </span>
     <? else: ?>
-    None
+    <span class="label label-default">none</span>
     <? endif; ?>
 </p>
 
 <p>
     <strong>Children:</strong>
     <? if (count($r['children']) > 0): ?>
-    <?= implode(', ', $r['children']) ?>
+    <span class="label label-primary">
+        <?= implode('</span><span class="label label-primary">, ', $r['children']) ?>
+    </span>
     <? else: ?>
-    None
+    <span class="label label-default">
+        none
+    </span>
     <? endif; ?>
 </p>
 
@@ -37,6 +49,7 @@
                 <th>Label</th>
                 <th>Description</th>
                 <th>Searchable</th>
+                <th>Sortable</th>
                 <th>Required</th>
             </tr>
         </thead>
@@ -59,12 +72,31 @@
                     <?= $f['searchable'] ?>
                 </td>
                 <td>
+                    <?= $f['sortable'] ?>
+                </td>
+                <td>
                     <?= $f['required'] ?>
                 </td>
             </tr>
             <? endforeach; ?>
         </tbody>
     </table>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">API</h3>
+    </div>
+    <div class="panel-body">
+        <? $url = $this->config()->dummy['endpoint'] . '/' . $r['name'] ?>
+        <p>
+            <span class="label label-default">GET</span>
+            <span class="label label-success">POST</span>
+            <span class="label label-info">PUT</span>
+            <span class="label label-warning">DELETE</span>&emsp;
+            <?= $url ?>
+        </p>
+    </div>
 </div>
 
 <? endforeach; ?>

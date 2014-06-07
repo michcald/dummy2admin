@@ -35,7 +35,8 @@ $mvc->addEventSubscriber(new \Michcald\DummyAdmin\Event\Listener\Auth());
 
 $view = \Michcald\Mvc\Container::get('mvc.view');
 $view->addHelper('\\Michcald\\DummyAdmin\\ViewHelper\\Url', 'url')
-    ->addHelper('\\Michcald\\DummyAdmin\\ViewHelper\\Config', 'config');
+    ->addHelper('\\Michcald\\DummyAdmin\\ViewHelper\\Config', 'config')
+    ->addHelper('\\Michcald\\DummyAdmin\\ViewHelper\\Repositories', 'repositories');
 
 
 $app = new Michcald\DummyAdmin\App();

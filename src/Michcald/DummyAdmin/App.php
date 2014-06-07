@@ -14,6 +14,8 @@ class App
     
     private $auth;
     
+    private $identityMap = array();
+    
     public function __construct()
     {
         $this->restClient = new \Michcald\RestClient\Client();
@@ -41,7 +43,7 @@ class App
         return $this;
     }
     
-    public function call($method, $uri, $data = array())
+    public function call($method, $uri, array $data = array())
     {
         $this->auth->setUsername($this->name)
             ->setPassword($this->password);
@@ -49,10 +51,15 @@ class App
         $this->restClient->setAuth($this->auth);
         
         $url = $this->endpoint . '/' . $uri;
-        
+
         switch ($method) {
             case 'get':
+                $key = md5($uri);
+                if (array_key_exists($key, $this->identityMap)) {
+                    return $this->identityMap[$key];
+                }
                 $response = $this->restClient->get($url, $data);
+                $this->identityMap[$key] = $response;
                 break;
             case 'post':
                 $response = $this->restClient->post($url, $data);
@@ -66,7 +73,7 @@ class App
             default:
                 throw new \Exception('Method not valid: ' . $method);
         }
-        
+
         return $response;
     }
 }

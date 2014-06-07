@@ -8,29 +8,43 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
     
     public function listAction($repository)
     {
-        $client = new \Michcald\RestClient\Client();
+        $page = (int)$this->getRequest()->getQueryParam('page', 1);
+        $query = $this->getRequest()->getQueryParam('query', false);
+        $orderBy = $this->getRequest()->getQueryParam('orderb', false);
+        $orderDir = $this->getRequest()->getQueryParam('orderd', false);
         
-        $auth = new \Michcald\RestClient\Auth\Basic();
-        $auth->setUsername('stefano')
-                ->setPassword('123456');
-        $client->setAuth($auth);
+        $app = \Michcald\Mvc\Container::get('dummy.app');
         
-        $resp = $client->get($this->baseUrl . "/{$repository}/_info");
+        $resp = $app->call('get', $repository . '/_info');
         $statusCode = $resp->getStatusCode();
         $json = $resp->getContent();
-        $array = json_decode($json, true);
+        $repoInfo = json_decode($json, true);
         
-        $resp = $client->get($this->baseUrl . "/{$repository}");
+        $resp = $app->call('get', $repository, array(
+            'page'   => $page,
+            'query'  => $query,
+            'orderb' => $orderBy,
+            'orderd' => $orderDir
+        ));
         $statusCode = $resp->getStatusCode();
         $json = $resp->getContent();
         $list = json_decode($json, true);
         
         //\Zend\Debug\Debug::dump($list);die;
         
-        $body = $this->getView()->render(
-            'views/repository/list.phtml',
+        $page = $this->getView()->render(
+            '../app/views/repository/list.phtml',
             array(
-                'list' => $list
+                'repository' => $repoInfo,
+                'list'       => $list,
+                'query'      => $query
+            )
+        );
+        
+        $body = $this->getView()->render(
+            '../app/views/layout.phtml',
+            array(
+                'page' => $page
             )
         );
         
