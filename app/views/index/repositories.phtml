@@ -48,9 +48,11 @@
                 <th>Type</th>
                 <th>Label</th>
                 <th>Description</th>
+                <th>Required</th>
                 <th>Searchable</th>
                 <th>Sortable</th>
-                <th>Required</th>
+                <th>Main</th>
+                <th>List</th>
             </tr>
         </thead>
         <tbody>
@@ -69,13 +71,19 @@
                     <?= $f['description'] ?>
                 </td>
                 <td>
+                    <?= $f['required'] ?>
+                </td>
+                <td>
                     <?= $f['searchable'] ?>
                 </td>
                 <td>
                     <?= $f['sortable'] ?>
                 </td>
                 <td>
-                    <?= $f['required'] ?>
+                    <?= $f['main'] ?>
+                </td>
+                <td>
+                    <?= $f['list'] ?>
                 </td>
             </tr>
             <? endforeach; ?>

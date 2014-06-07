@@ -1,12 +1,16 @@
 <ol class="breadcrumb">
     <li><a href="<?= $this->url('') ?>">Home</a></li>
-    <? foreach ($_['repository']['parents'] as $p): ?>
-    <li>
-        <a href="<?= $this->url($p . '/list') ?>">
-            <?= $p ?>
-        </a>
-    </li>
+    <? $parents = array() ?>
+    <? foreach ($_['repository']['fields'] as $field): ?>
+    <? if ($field['type'] == 'foreign_key'): ?>
+    <? $parents[] = '<a href="' . $this->url($field['repository']['name'] . '/list') . '">' . $field['repository']['label']['plural'] . '</a>' ?>
+    <? endif; ?>
     <? endforeach; ?>
+    <? if (count($parents) > 0): ?>
+    <li>
+        <?= implode(', ', $parents) ?>
+    </li>
+    <? endif; ?>
     <li class="active">
         <?= $_['repository']['label']['plural'] ?>
     </li>
@@ -20,11 +24,18 @@
 
 <div>
     <div class="col-md-10">
-        <form method="GET">
+        <form action="<?= $this->url(
+            $_['repository']['name'] . '/list'
+        ) ?>" method="GET">
             <div class="input-group">
                 <input type="text" name="query"<? if ($_['query']): ?> value="<?= $_['query']?>"<? endif; ?> class="form-control" autocomplete="off" />
+                <input type="hidden" name="orderb" value="<?= $_['orderb'] ?>" />
+                <input type="hidden" name="orderd" value="<?= $_['orderd'] ?>" />
+                <? foreach ($_['filters'] as $filter => $value): ?>
+                <input type="hidden" name="filters[<?= $filter ?>]" value="<?= $value ?>" />
+                <? endforeach; ?>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
+                    <button class="btn btn-default" type="submit">
                         <span class="glyphicon glyphicon-search"></span>
                     </button>
                 </span>
@@ -40,6 +51,67 @@
         </a>
     </div>
 </div>
+
+<? if (count($_['repository']['parents']) > 0): ?>
+<br /><br /><br />
+<div class="container">
+    <strong>Filters:</strong>
+    <? foreach ($_['repository']['fields'] as $field): ?>
+    <? if ($field['type'] == 'foreign_key'): ?>
+    &emsp;
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          <strong><?= $field['repository']['label']['singular'] ?>:</strong>
+          <? if (isset($_['filters'][$field['name']])): ?>
+          <? foreach ($field['options'] as $option): ?>
+          <? if ($option['value'] == $_['filters'][$field['name']]): ?>
+          <?= $option['option'] ?>
+          <? endif; ?>
+          <? endforeach; ?>
+          <? else: ?>
+          All
+          <? endif; ?>
+          <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+            <a href="<?= $this->url(
+                $_['repository']['name'] . '/list',
+                array(
+                    'query' => $_['query'],
+                    'orderb' => $_['orderb'],
+                    'orderd' => $_['orderd'],
+                    'filters' => array()
+                )
+            ) ?>">
+                All
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <? foreach ($field['options'] as $option): ?>
+            <a href="<?= $this->url(
+                $_['repository']['name'] . '/list',
+                array(
+                    'query' => $_['query'],
+                    'orderb' => $_['orderb'],
+                    'orderd' => $_['orderd'],
+                    'filters' => array_merge(
+                        $_['filters'],
+                        array($field['name'] => $option['value'])
+                    )
+                )
+            ) ?>">
+                <?= $option['option'] ?>
+            </a>
+            <? endforeach; ?>
+        </li>
+      </ul>
+    </div>
+    <? endif; ?>
+    <? endforeach; ?>
+</div>
+<? endif; ?>
 
 <? if ($_['list']['paginator']['results'] == 0): ?>
 
@@ -62,7 +134,10 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'page' => $_['list']['paginator']['page']['current'] - 1
+                    'page' => $_['list']['paginator']['page']['current'] - 1,
+                    'query' => $_['query'],
+                    'orderb' => $_['orderb'],
+                    'orderd' => $_['orderd']
                 )
             ) ?>">
                 &laquo;
@@ -76,7 +151,10 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'page' => $i
+                    'page' => $i,
+                    'query' => $_['query'],
+                    'orderb' => $_['orderb'],
+                    'orderd' => $_['orderd']
                 )
             )?>">
                 <?= $i ?>
@@ -88,7 +166,10 @@
             <a href="<?= $this->url(
                 $_['repository']['name'] . '/list',
                 array(
-                    'page' => $_['list']['paginator']['page']['current'] + 1
+                    'page' => $_['list']['paginator']['page']['current'] + 1,
+                    'query' => $_['query'],
+                    'orderb' => $_['orderb'],
+                    'orderd' => $_['orderd']
                 )
             ) ?>">
                 &raquo;
@@ -105,11 +186,13 @@
         <thead>
             <tr>
                 <? foreach ($_['repository']['fields'] as $field): ?>
+                <? if (!$field['list']) continue; ?>
                 <th>
                     <? if ($field['sortable']): ?>
                     <a href="<?= $this->url(
                         $_['repository']['name'] . '/list',
                         array(
+                            'query' => $_['query'],
                             'orderb' => $field['name'],
                             'orderd' => 'asc'
                         )
@@ -127,14 +210,26 @@
         <tbody>
             <? foreach ($_['list']['results'] as $entity): ?>
             <tr>
-                <? foreach ($entity as $key => $value): ?>
+                <? foreach ($_['repository']['fields'] as $field): ?>
+                <? if (!$field['list']) continue; ?>
                 <td>
-                    <? if (is_array($value)): ?>
-                    <a href="http://localhost/dummy2/dummy2/pub/<?= $value['url'] ?>" target="_blank">
+                    <? if ($field['type'] == 'foreign_key'): ?>
+                    <? foreach ($field['options'] as $option): ?>
+                    <? if ($option['value'] == $entity[$field['name']]): ?>
+                    <a href="<?= $this->url(
+                        $field['repository']['name'] . '/read/' . $option['value']
+                    ) ?>">
+                        <?= $option['option'] ?>
+                    </a>
+                    <? break; ?>
+                    <? endif; ?>
+                    <? endforeach; ?>
+                    <? elseif ($field['type'] == 'file'): ?>
+                    <a href="<?= $entity[$field['name']]['url'] ?>" target="_blank">
                         file
                     </a>
                     <? else: ?>
-                    <?= $value ?>
+                    <?= $entity[$field['name']] ?>
                     <? endif; ?>
                 </td>
                 <? endforeach; ?>

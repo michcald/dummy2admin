@@ -4,14 +4,13 @@ namespace Michcald\DummyAdmin\Controller;
 
 class RepositoryController extends \Michcald\Mvc\Controller\HttpController
 {
-    private $baseUrl = 'http://localhost/dummy2/dummy2/api';
-    
     public function listAction($repository)
     {
         $page = (int)$this->getRequest()->getQueryParam('page', 1);
         $query = $this->getRequest()->getQueryParam('query', false);
         $orderBy = $this->getRequest()->getQueryParam('orderb', false);
         $orderDir = $this->getRequest()->getQueryParam('orderd', false);
+        $filters = $this->getRequest()->getQueryParam('filters', array());
         
         $app = \Michcald\Mvc\Container::get('dummy.app');
         
@@ -21,10 +20,11 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
         $repoInfo = json_decode($json, true);
         
         $resp = $app->call('get', $repository, array(
-            'page'   => $page,
-            'query'  => $query,
-            'orderb' => $orderBy,
-            'orderd' => $orderDir
+            'page'    => $page,
+            'query'   => $query,
+            'orderb'  => $orderBy,
+            'orderd'  => $orderDir,
+            'filters' => $filters
         ));
         $statusCode = $resp->getStatusCode();
         $json = $resp->getContent();
@@ -37,7 +37,10 @@ class RepositoryController extends \Michcald\Mvc\Controller\HttpController
             array(
                 'repository' => $repoInfo,
                 'list'       => $list,
-                'query'      => $query
+                'query'      => $query,
+                'orderb'     => $orderBy,
+                'orderd'     => $orderDir,
+                'filters'    => $filters
             )
         );
         
