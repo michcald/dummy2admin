@@ -26,17 +26,18 @@
     </li>
     
     <? foreach ($_['repository']['children'] as $child): ?>
+    <? $fieldName = $_['repository']['name'] . '_id' ?>
     <li>
         <a href="<?= $this->url(
-            $_['repository']['name'] . '/list',
+            $child['repository'] . '/list',
             array(
                 'filters' => array(
-                    //$field['name'] => $_['entity'][$field['name']]
+                    $fieldName => $_['entity']['id']
                 )
             )
         ) ?>">
             <span class="glyphicon glyphicon-list"></span>
-            <?= $child ?>
+            <?= $child['label']['plural'] ?>
         </a>
     </li>
     <? endforeach; ?>
