@@ -99,124 +99,126 @@
     </div>
     <div class="panel-body">
         <? $url = $this->config()->dummy['endpoint'] . '/<b>' . $r['name'] . '</b>' ?>
-        <table class="table">
-            <tr>
-                <td>
-                    <span class="label label-default">GET</span>
-                </td>
-                <td>
-                    <p>Fetching all the elements</p>
-                    <pre><?= $url ?></pre>
-                    <p>Parameters</p>
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th>Param</th>
-                                <th>Pattern</th>
-                                <th>Required</th>
-                                <th>Default</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>page</td>
-                                <td>\d+</td>
-                                <td></td>
-                                <td>1</td>
-                                <td>The page to fetch</td>
-                            </tr>
-                            <tr>
-                                <td>limit</td>
-                                <td>\d+</td>
-                                <td></td>
-                                <td>10</td>
-                                <td>Number of results in a page</td>
-                            </tr>
-                            <tr>
-                                <td>query</td>
-                                <td>...*</td>
-                                <td></td>
-                                <td></td>
-                                <td>Full text search</td>
-                            </tr>
-                            <tr>
-                                <td>orderb</td>
-                                <td>
-                                    <? $sortableFields = array() ?>
-                                    <? foreach ($r['fields'] as $field): ?>
-                                    <? if ($field['sortable']): ?>
-                                    <? $sortableFields[] = $field['name'] ?>
-                                    <? endif; ?>
-                                    <? endforeach; ?>
-                                    <?= implode('|', $sortableFields) ?>
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td>Order by</td>
-                            </tr>
-                            <tr>
-                                <td>orderd</td>
-                                <td>
-                                    ASC|DESC
-                                </td>
-                                <td></td>
-                                <td>ASC</td>
-                                <td>Order direction</td>
-                            </tr>
-                            <tr>
-                                <td>filters</td>
-                                <td>
-                                    <? foreach ($r['fields'] as $field): ?>
-                                    <? if ($field['name'] == 'id') continue; ?>
-                                    filters[<?= $field['name'] ?>]=.*<br />
-                                    <? endforeach; ?>
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td>Array for filtering by field</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="label label-default">GET</span>
-                </td>
-                <td>
-                    <p>Fetching only the element defined by {id}</p>
-                    <pre><?= $url ?>/{id}</pre>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="label label-success">POST</span>
-                </td>
-                <td>
-                    <p>Creating a new element</p>
-                    <pre><?= $url ?></pre>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="label label-info">PUT</span>
-                </td>
-                <td>
-                    <p>Update an element identified by {id}</p>
-                    <pre><?= $url ?>/{id}</pre>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="label label-warning">DELETE</span>
-                </td>
-                <td>
-                    <p>Delete the element identified by {id}</p>
-                    <pre><?= $url ?>/{id}</pre>
-                </td>
-            </tr>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-condensed">
+                <tr>
+                    <td>
+                        <span class="label label-default">GET</span>
+                    </td>
+                    <td>
+                        <p>Fetching all the elements</p>
+                        <pre><?= $url ?></pre>
+                        <p>Parameters</p>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Param</th>
+                                    <th>Pattern</th>
+                                    <th>Required</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>page</td>
+                                    <td>\d+</td>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>The page to fetch</td>
+                                </tr>
+                                <tr>
+                                    <td>limit</td>
+                                    <td>\d+</td>
+                                    <td></td>
+                                    <td>10</td>
+                                    <td>Number of results in a page</td>
+                                </tr>
+                                <tr>
+                                    <td>query</td>
+                                    <td>...*</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Full text search</td>
+                                </tr>
+                                <tr>
+                                    <td>orderb</td>
+                                    <td>
+                                        <? $sortableFields = array() ?>
+                                        <? foreach ($r['fields'] as $field): ?>
+                                        <? if ($field['sortable']): ?>
+                                        <? $sortableFields[] = $field['name'] ?>
+                                        <? endif; ?>
+                                        <? endforeach; ?>
+                                        <?= implode('|', $sortableFields) ?>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Order by</td>
+                                </tr>
+                                <tr>
+                                    <td>orderd</td>
+                                    <td>
+                                        ASC|DESC
+                                    </td>
+                                    <td></td>
+                                    <td>ASC</td>
+                                    <td>Order direction</td>
+                                </tr>
+                                <tr>
+                                    <td>filters</td>
+                                    <td>
+                                        <? foreach ($r['fields'] as $field): ?>
+                                        <? if ($field['name'] == 'id') continue; ?>
+                                        filters[<?= $field['name'] ?>]=.*<br />
+                                        <? endforeach; ?>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Array for filtering by field</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="label label-default">GET</span>
+                    </td>
+                    <td>
+                        <p>Fetching only the element defined by {id}</p>
+                        <pre><?= $url ?>/{id}</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="label label-success">POST</span>
+                    </td>
+                    <td>
+                        <p>Creating a new element</p>
+                        <pre><?= $url ?></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="label label-info">PUT</span>
+                    </td>
+                    <td>
+                        <p>Update an element identified by {id}</p>
+                        <pre><?= $url ?>/{id}</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="label label-warning">DELETE</span>
+                    </td>
+                    <td>
+                        <p>Delete the element identified by {id}</p>
+                        <pre><?= $url ?>/{id}</pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 
