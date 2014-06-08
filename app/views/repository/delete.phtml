@@ -2,12 +2,12 @@
     '../app/views/repository/partials/breadcrumbs.phtml',
     array(
         'repository' => $_['repository'],
-        'active' => 'Edit'
+        'active' => 'Delete'
     )
 ) ?>
 
 <?= $this->render('../app/views/repository/partials/tabs.phtml', array(
-    'action' => 'edit',
+    'action' => 'delete',
     'repository' => $_['repository'],
     'entity' => $_['entity']
 )) ?>
@@ -17,20 +17,19 @@
 <? if (isset($_['success']) && $_['success']): ?>
 
 <p class="alert alert-success">
-    Element saved successfully!
+    Element deleted successfully!
 </p>
 
 <? else: ?>
 
-<form role="form" enctype="multipart/form-data" method="POST">
-    <?= $this->render(
-        '../app/views/repository/partials/form.phtml',
-        array(
-            'repository' => $_['repository'],
-            'entity' => $_['entity'],
-            'error' => $_['error']
-        )
-    )?>
+<p class="alert alert-danger">
+    Do you really want to delete this element?
+</p>
+
+<form role="form" method="POST">
+    <button class="btn btn-danger" type="submit">
+        Delete
+    </button>
 </form>
 
 <? endif; ?>

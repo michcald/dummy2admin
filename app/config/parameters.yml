@@ -1,7 +1,7 @@
 env: dev
 
 admin:
-    title: Dummy
+    title: Bruel
     description: Dummy administration panel
 
 dummy:

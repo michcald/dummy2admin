@@ -19,7 +19,32 @@
     <tr>
         <th><?= $field['label'] ?></th>
         <td>
+            <? if ($field['type'] == 'file'): ?>
+            
+            <? if ($_['entity'][$field['name']]): ?>
+            <a href="<?= $_['entity'][$field['name']]['url'] ?>" targe="_blank">
+                Download
+            </a>
+            <? endif; ?>
+            
+            <? elseif ($field['type'] == 'foreign_key'): ?>
+            
+            <? foreach ($field['options'] as $option): ?>
+            <? if ($option['value'] == $_['entity'][$field['name']]): ?>
+            <a href="<?= $this->url(
+                $field['repository']['name'] . '/read/' . $option['value']
+            ) ?>">
+                <?= $option['option'] ?>
+            </a>
+            <? break; ?>
+            <? endif; ?>
+            <? endforeach; ?>
+            
+            <? else: ?>
+            
             <?= $_['entity'][$field['name']] ?>
+            
+            <? endif; ?>
         </td>
     </tr>
     <? endforeach; ?>

@@ -3,6 +3,7 @@
         <a href="<?= $this->url(
             $_['repository']['name'] . '/read/' . $_['entity']['id']
         ) ?>">
+            <span class="glyphicon glyphicon-eye-open"></span>
             Read
         </a>
     </li>
@@ -10,9 +11,20 @@
         <a href="<?= $this->url(
             $_['repository']['name'] . '/edit/' . $_['entity']['id']
         ) ?>">
+            <span class="glyphicon glyphicon-edit"></span>
             Edit
         </a>
     </li>
+    
+    <li<? if ($_['action'] == 'delete'): ?> class="active"<? endif; ?>>
+        <a href="<?= $this->url(
+            $_['repository']['name'] . '/delete/' . $_['entity']['id']
+        ) ?>">
+            <span class="glyphicon glyphicon-remove red"></span>
+            Delete
+        </a>
+    </li>
+    
     <? foreach ($_['repository']['children'] as $child): ?>
     <li>
         <a href="<?= $this->url(
@@ -23,13 +35,9 @@
                 )
             )
         ) ?>">
+            <span class="glyphicon glyphicon-list"></span>
             <?= $child ?>
         </a>
     </li>
     <? endforeach; ?>
-    <li<? if ($_['action'] == 'delete'): ?> class="active"<? endif; ?>>
-        <a href="#">
-            Delete
-        </a>
-    </li>
 </ul>

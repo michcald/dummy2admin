@@ -2,22 +2,14 @@
     '../app/views/repository/partials/breadcrumbs.phtml',
     array(
         'repository' => $_['repository'],
-        'active' => 'Edit'
+        'active' => 'Create'
     )
 ) ?>
-
-<?= $this->render('../app/views/repository/partials/tabs.phtml', array(
-    'action' => 'edit',
-    'repository' => $_['repository'],
-    'entity' => $_['entity']
-)) ?>
-
-<br />
 
 <? if (isset($_['success']) && $_['success']): ?>
 
 <p class="alert alert-success">
-    Element saved successfully!
+    Element created successfully!
 </p>
 
 <? else: ?>

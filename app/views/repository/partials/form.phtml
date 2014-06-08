@@ -1,9 +1,20 @@
+<? if (isset($_['error'])): ?>
+<p class="alert alert-danger">
+    <?= $_['error']['message'] ?>
+</p>
+<? endif; ?>
+
 <? foreach ($_['repository']['fields'] as $field): ?>
-<div class="form-group">
+
+<? $errors = isset($_['error']) ? $_['error']['fields'][$field['name']] : array() ?>
+
+<div class="form-group<? if (count($errors) > 0): ?> has-error<? endif; ?>">
     
+    <? if (array_key_exists($field['name'], $_['entity'])): ?>
     <label for="<?= $field['name'] ?>">
         <?= $field['label'] ?>
     </label>
+    <? endif; ?>
     
     <? if ($field['description']): ?>
     <p><?= $field['description'] ?></p>
@@ -15,12 +26,12 @@
        class="form-control" 
        name="<?= $field['name'] ?>" 
        id="<?= $field['name'] ?>" 
-       <? if (isset($_['entity'])): ?>value="<?= $_['entity'][$field['name']] ?>"<?endif?>
+       <? if (isset($_['entity'][$field['name']])): ?>value="<?= $_['entity'][$field['name']] ?>"<?endif?>
     />
     
     <? elseif ($field['type'] == 'primary_key'): ?>
     
-    <? if (isset($_['entity'])): ?>
+    <? if (isset($_['entity'][$field['name']])): ?>
     <input type="text" 
         class="form-control" 
         id="<?= $field['name'] ?>" 
@@ -42,7 +53,7 @@
         <? foreach ($field['options'] as $option): ?>
         <option 
             value="<?= $option['value'] ?>"
-            <? if (isset($_['entity'])): ?>
+            <? if (isset($_['entity']) && $_['entity']): ?>
             <? if ($_['entity'][$field['name']] == $option['value']): ?> selected<? endif; ?>
             <? endif; ?>
         >
@@ -65,7 +76,40 @@
         class="form-control" 
         name="<?= $field['name'] ?>" 
         id="<?= $field['name'] ?>"
-    ><? if (isset($_['entity'])): ?><?= $_['entity'][$field['name']] ?><? endif; ?></textarea>
+    ><? if (isset($_['entity'][$field['name']])): ?><?= $_['entity'][$field['name']] ?><? endif; ?></textarea>
+    
+    <? elseif ($field['type'] == 'boolean'): ?>
+    
+    <select 
+        class="form-control" 
+       name="<?= $field['name'] ?>" 
+       id="<?= $field['name'] ?>"
+    >
+        <option value="0">
+            No
+        </option>
+        <option value="1"<? if (isset($_['entity'][$field['name']])): ?>selected="selected"<?endif?>>
+            Yes
+        </option>
+    </select>
+    
+    <? elseif ($field['type'] == 'date'): ?>
+    
+    <input type="date" 
+       class="form-control" 
+       name="<?= $field['name'] ?>" 
+       id="<?= $field['name'] ?>" 
+       <? if (isset($_['entity'][$field['name']])): ?>value="<?= $_['entity'][$field['name']] ?>"<?endif?>
+    />
+    
+    <? elseif ($field['type'] == 'integer'): ?>
+    
+    <input type="number" 
+       class="form-control" 
+       name="<?= $field['name'] ?>" 
+       id="<?= $field['name'] ?>" 
+       <? if (isset($_['entity'][$field['name']])): ?>value="<?= $_['entity'][$field['name']] ?>"<?endif?>
+    />
     
     <? endif; ?>
     
@@ -75,12 +119,22 @@
     </p>
     <? endif; ?>
     
+    <? if (isset($_['error'])): ?>
+    <ul class="red">
+        <? foreach ($_['error']['fields'][$field['name']] as $error): ?>
+        <li>
+            <?= $error ?>
+        </li>
+        <? endforeach; ?>
+    </ul>
+    <? endif; ?>
+    
 </div>
 
 <? endforeach; ?>
 
 <button type="submit" class="btn btn-default">
-    <? if (isset($_['entity'])): ?>
+    <? if (isset($_['entity']['id'])): ?>
     Save
     <? else: ?>
     Create

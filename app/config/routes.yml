@@ -61,7 +61,7 @@ routes:
       action: editAction
 
     - name: dummy.repo.delete
-      methods: ["GET"]
+      methods: ["GET", "POST"]
       uri:
           pattern: "{repository}/delete/{id}"
           requirements:
