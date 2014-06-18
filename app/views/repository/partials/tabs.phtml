@@ -7,6 +7,13 @@
             Read
         </a>
     </li>
+    <? $flag = true; ?>
+    <? foreach ($_['repository']['fields'] as $field): ?>
+    <? if ($field['type'] == 'file'): ?>
+    <? $flag = false; break; ?>
+    <? endif; ?>
+    <? endforeach; ?>
+    <? if ($flag): ?>
     <li<? if ($_['action'] == 'edit'): ?> class="active"<? endif; ?>>
         <a href="<?= $this->url(
             $_['repository']['name'] . '/edit/' . $_['entity']['id']
@@ -15,7 +22,8 @@
             Edit
         </a>
     </li>
-    
+    <? endif; ?>
+
     <li<? if ($_['action'] == 'delete'): ?> class="active"<? endif; ?>>
         <a href="<?= $this->url(
             $_['repository']['name'] . '/delete/' . $_['entity']['id']
@@ -24,7 +32,7 @@
             Delete
         </a>
     </li>
-    
+
     <? foreach ($_['repository']['children'] as $child): ?>
     <? $fieldName = $_['repository']['name'] . '_id' ?>
     <li>
