@@ -1,0 +1,77 @@
+<ul class="pagination">
+    <li class="disabled">
+        <a href="#">
+            Total results: <strong><?= $_['list']['paginator']['results'] ?></strong>
+        </a>
+    </li>
+    <? if ($_['list']['paginator']['page']['current'] > 1): ?>
+    <li>
+        <a href="<?= $this->url(
+            $_['repository']['name'] . '/list',
+            array(
+                'page'    => $_['list']['paginator']['page']['current'] - 1,
+                'query'   => $_['query'],
+                'limit'   => $_['limit'],
+                'orderb'  => $_['orderb'],
+                'orderd'  => $_['orderd'],
+                'filters' => $_['filters']
+            )
+        ) ?>">
+            &laquo;
+        </a>
+    </li>
+    <? else: ?>
+    <li class="disabled"><a href="#">&laquo;</a></li>
+    <? endif; ?>
+
+    <?
+    $current = $_['list']['paginator']['page']['current'];
+    $start = $current - 5;
+    if ($start < 1) {
+        $start = 1;
+    }
+    $end = $current + 5;
+    if ($end >= $_['list']['paginator']['page']['total']) {
+        $end = $_['list']['paginator']['page']['total'];
+    }
+    ?>
+
+    <? for($i=$start; $i<=$end; $i++): ?>
+    <li<? if ($current == $i): ?> class="active"<? endif; ?>>
+        <a href="<?= $this->url(
+            $_['repository']['name'] . '/list',
+            array(
+                'page'   => $i,
+                'query'  => $_['query'],
+                'limit'  => $_['limit'],
+                'orderb' => $_['orderb'],
+                'orderd' => $_['orderd'],
+                'filters' => $_['filters']
+            )
+        )?>">
+            <?= $i ?>
+        </a>
+    </li>
+    <? endfor; ?>
+
+
+    <? if ($_['list']['paginator']['page']['current'] < $_['list']['paginator']['page']['total']): ?>
+    <li>
+        <a href="<?= $this->url(
+            $_['repository']['name'] . '/list',
+            array(
+                'page'   => $_['list']['paginator']['page']['current'] + 1,
+                'query'  => $_['query'],
+                'limit'  => $_['limit'],
+                'orderb' => $_['orderb'],
+                'orderd' => $_['orderd'],
+                'filters' => $_['filters']
+            )
+        ) ?>">
+            &raquo;
+        </a>
+    </li>
+    <? else: ?>
+    <li class="disabled"><a href="#">&raquo;</a></li>
+    <? endif; ?>
+</ul>

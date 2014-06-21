@@ -119,65 +119,20 @@
 <? else: ?>
 
 <div class="pull-right">
-    <ul class="pagination">
-        <li class="disabled">
-            <a href="#">
-                Total results: <strong><?= $_['list']['paginator']['results'] ?></strong>
-            </a>
-        </li>
-        <? if ($_['list']['paginator']['page']['current'] > 1): ?>
-        <li>
-            <a href="<?= $this->url(
-                $_['repository']['name'] . '/list',
-                array(
-                    'page'   => $_['list']['paginator']['page']['current'] - 1,
-                    'query'  => $_['query'],
-                    'limit'  => $_['limit'],
-                    'orderb' => $_['orderb'],
-                    'orderd' => $_['orderd']
-                )
-            ) ?>">
-                &laquo;
-            </a>
-        </li>
-        <? else: ?>
-        <li class="disabled"><a href="#">&laquo;</a></li>
-        <? endif; ?>
-        <? for($i=1; $i<=$_['list']['paginator']['page']['total']; $i++): ?>
-        <li<? if ($_['list']['paginator']['page']['current'] == $i): ?> class="active"<? endif; ?>>
-            <a href="<?= $this->url(
-                $_['repository']['name'] . '/list',
-                array(
-                    'page'   => $i,
-                    'query'  => $_['query'],
-                    'limit'  => $_['limit'],
-                    'orderb' => $_['orderb'],
-                    'orderd' => $_['orderd']
-                )
-            )?>">
-                <?= $i ?>
-            </a>
-        </li>
-        <? endfor; ?>
-        <? if ($_['list']['paginator']['page']['current'] < $_['list']['paginator']['page']['total']): ?>
-        <li>
-            <a href="<?= $this->url(
-                $_['repository']['name'] . '/list',
-                array(
-                    'page'   => $_['list']['paginator']['page']['current'] + 1,
-                    'query'  => $_['query'],
-                    'limit'  => $_['limit'],
-                    'orderb' => $_['orderb'],
-                    'orderd' => $_['orderd']
-                )
-            ) ?>">
-                &raquo;
-            </a>
-        </li>
-        <? else: ?>
-        <li class="disabled"><a href="#">&raquo;</a></li>
-        <? endif; ?>
-    </ul>
+    <?= $this->render(
+        '../app/views/repository/partials/paginator.phtml',
+        array(
+            'repository' => $_['repository'],
+            'list' => $_['list'],
+            'query'   => $_['query'],
+            'limit'   => $_['limit'],
+            'orderb'  => $_['orderb'],
+            'orderd'  => $_['orderd'],
+            'filters' => array_merge(
+                $_['filters']
+            )
+        )
+    ) ?>
 </div>
 
 <br />
@@ -187,7 +142,7 @@
             <strong>Rows per page:</strong> <?= $_['limit'] ?> <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <? for($i=10; $i<=100; $i+=10): ?>
+            <? for($i=100; $i<=1000; $i+=100): ?>
             <li>
                 <a href="<?= $this->url(
                     $_['repository']['name'] . '/list',
@@ -228,7 +183,7 @@
                     ) ?>">
                         <?= $field['label'] ?>
                     </a>
-                    
+
                     <? if ($_['orderb'] == $field['name']): ?>
                     <? if ($_['orderd'] == 'asc'): ?>
                     <span class="glyphicon glyphicon-sort-by-alphabet"></span>
@@ -236,7 +191,7 @@
                     <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
                     <? endif; ?>
                     <? endif;  ?>
-                    
+
                     <? else: ?>
                     <?= $field['label'] ?>
                     <? endif; ?>
@@ -252,7 +207,7 @@
                 <? if (!$field['list']) continue; ?>
                 <td>
                     <? if ($field['type'] == 'foreign_key'): ?>
-                    
+
                     <? foreach ($field['options'] as $option): ?>
                     <? if ($option['value'] == $entity[$field['name']]): ?>
                     <a href="<?= $this->url(
@@ -263,15 +218,15 @@
                     <? break; ?>
                     <? endif; ?>
                     <? endforeach; ?>
-                    
+
                     <? elseif ($field['type'] == 'file'): ?>
-                    
+
                     <? if ($entity[$field['name']]): ?>
                     <a href="<?= $entity[$field['name']]['url'] ?>" target="_blank">
                         file
                     </a>
                     <? endif; ?>
-                    
+
                     <? else: ?>
                     <?= $entity[$field['name']] ?>
                     <? endif; ?>
